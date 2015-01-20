@@ -1,10 +1,10 @@
 #!/bin/env python
 
 #Variables to set for your project
-startDate = (2010,8,1)
-projectId = 1234
-flurry_email = 'your@email.com'
-flurry_password = 'YOURPASSWORD'
+startDate = (2014,2,10)
+projectId = 469784
+flurry_email = 'darko@mediately.co'
+flurry_password = 'R$#qC!8tg$kg#4xb1O'
 
 import requests
 import csv
@@ -60,6 +60,7 @@ def dump(projectId,email,password,startDate,endDate):
     with open('out.json','w') as file:
         while cur_date <= endDate:
             events = get_events(session,projectId, cur_date,offset)
+            #print events
             events_count = len(events)
 
             for event in events:
@@ -68,14 +69,16 @@ def dump(projectId,email,password,startDate,endDate):
             if events_count > 0:
                 sessions_count = len([event for event in events if event['Session Index'] == '1'])
                 print {'date' : cur_date, 'events' : events_count, 'sessions' : sessions_count, 'offset' : offset}
-                offset += sessions_count
-            else:
-                print {'date' : cur_date, 'events' : events_count, 'offset' : offset}
-                offset = 0
-                cur_date += datetime.timedelta(days=1)
+            #    offset += sessions_count
+            #else:
+            #    print {'date' : cur_date, 'events' : events_count, 'offset' : offset}
+            #    offset = 0
+            #    cur_date += datetime.timedelta(days=1)
+            cur_date += datetime.timedelta(days=1)
             time.sleep(5)
 
 
 if __name__ == '__main__':
     endDate = datetime.datetime.today()
+    #endDate = datetime.datetime(*startDate) + datetime.timedelta(days=7)
     dump(projectId,flurry_email,flurry_password,datetime.datetime(*startDate),endDate)
